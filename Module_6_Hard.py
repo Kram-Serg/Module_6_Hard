@@ -37,8 +37,8 @@ class Figure:
         return sum(self.__sides)
 
     def set_sides(self,*new_sides):
-        if len(new_sides) == self.sides_count and self.__is_valid_sides() == True:
-            self.__sides = list(new_sides)
+        if len(new_sides) == self.sides_count:
+            self.__sides = new_sides
 
 class Circle(Figure):
 
