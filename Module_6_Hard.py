@@ -6,7 +6,8 @@ class Figure:
     def __init__(self, color, *sides):
         self.__color = color
         self.__sides = sides if len(sides) == self.sides_count else [1] * self.sides_count
-        self.filled = bool
+        self.filled = True
+        filled = True
 
     def get_color(self):
         return self.__color
@@ -14,19 +15,20 @@ class Figure:
     @staticmethod
     def __is_valid_color(r, g, b):
         if 0 <= r <= 255 and 0 <= g <= 255 and 0 <= b <= 255:
-            return r, g, b
+            return True
+        else:
+            return False
 
     def set_color(self, r, g, b):
-        if  self.__is_valid_color(r, g, b):
+        if  self.__is_valid_color(r, g, b) == True:
             self.__color = r, g, b
 
     def __is_valid_sides(self, *sides):
-        flag = True
         for side in sides:
-            if side <= 0 or not isinstance(side, int):
-                flag = False
+            if side > 0 and isinstance(side, int) and len(sides) == self.sides_count:
+                return True
             else:
-                return flag and len(sides) == self.sides_count
+                return False
 
     def get_sides(self):
         return self.__sides
@@ -35,7 +37,7 @@ class Figure:
         return sum(self.__sides)
 
     def set_sides(self,*new_sides):
-        if len(new_sides) == self.sides_count:
+        if len(new_sides) == self.sides_count and self.__is_valid_sides() == True:
             self.__sides = list(new_sides)
 
 class Circle(Figure):
@@ -43,13 +45,9 @@ class Circle(Figure):
     sides_count = 1
     def __init__(self, color, side):
         super().__init__(color,side)
-        self.__radius = self.get_radius(side)
+        self.__radius = side/(2*pi)
 
-    @staticmethod
-    def get_radius(side):
-        return side/(2*pi)
-
-    def get_squred(self):
+    def get_squared(self):
         return (self.__radius)**2*pi
 
 class Triangle(Figure):
@@ -59,7 +57,7 @@ class Triangle(Figure):
         super().__init__(color, *sides)
 
     def get_square(self):
-        a, b, c = self._Figure__sides
+        a, b, c = self.get_sides()
         p = self.__len__()/2
         return ((p*(p-a)*(p-b)*(p-c))**(1/2))
 
@@ -71,7 +69,7 @@ class Cube(Figure):
         super().__init__(color, *sides)
 
     def get_volume(self):
-        return (self._Figure__sides[0]**3)
+        return (self.get_sides()[0]**3)
 
 
 circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
@@ -85,7 +83,7 @@ print(cube1.get_color())
 triangle1.set_color(255, 100, 10)
 print(triangle1.get_color())
 print('Проверка изменения сторон')
-# Проверка на изменение сторон:
+# # Проверка на изменение сторон:
 cube1.set_sides(5, 3, 12, 4, 5) # Не изменится
 print(cube1.get_sides())
 circle1.set_sides(15) # Изменится
@@ -93,16 +91,15 @@ print(circle1.get_sides())
 triangle1.set_sides(10, 3, 10)
 print(triangle1.get_sides())
 print('Проверка периметра')
-# Проверка периметра (круга), это и есть длина:
+# # Проверка периметра (круга), это и есть длина:
 print(len(circle1))
 print(len((triangle1)))
 print((len(cube1)))
 print('Проверка объема/площади')
-# Проверка объёма (куба):
+# # Проверка объёма (куба):
 print(cube1.get_volume())
-print(circle1.get_squred())
+print(circle1.get_squared())
 print(triangle1.get_square())
-
 
 
 
